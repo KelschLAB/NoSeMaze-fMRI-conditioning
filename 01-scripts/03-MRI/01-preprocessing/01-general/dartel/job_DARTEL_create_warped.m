@@ -1,0 +1,69 @@
+%job_DARTEL_create_warped
+
+matlabbatch{1}.spm.tools.dartel.crt_warped.flowfields = {
+                                                         '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/DARTEL/u_rc1_20171122/u_rc1coreg_st5_ZI_M170823A_1_1_20170823_111247_05_reorient_Template.nii'
+                                                         '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/DARTEL/u_rc1_20171122/u_rc1coreg_st5_ZI_M170823B_1_1_20170823_130543_05_reorient_Template.nii'
+                                                         '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/DARTEL/u_rc1_20171122/u_rc1coreg_st5_ZI_M170823C_1_1_20170823_141344_05_reorient_Template.nii'
+                                                         '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/DARTEL/u_rc1_20171122/u_rc1coreg_st5_ZI_M170823D_1_1_20170823_154439_05_reorient_Template.nii'
+                                                         '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/DARTEL/u_rc1_20171122/u_rc1coreg_st5_ZI_M170823E_1_1_20170823_165039_05_reorient_Template.nii'
+                                                         '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/DARTEL/u_rc1_20171122/u_rc1coreg_st5_ZI_M170824A_1_1_20170824_093456_11_reorient_Template.nii'
+                                                         '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/DARTEL/u_rc1_20171122/u_rc1coreg_st5_ZI_M170824B_1_1_20170824_105215_05_reorient_Template.nii'
+                                                         '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/DARTEL/u_rc1_20171122/u_rc1coreg_st5_ZI_M170830A_1_1_20170830_094641_05_reorient_Template.nii'
+                                                         '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/DARTEL/u_rc1_20171122/u_rc1coreg_st5_ZI_M170830B_1_1_20170830_105157_05_reorient_Template.nii'
+                                                         '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/DARTEL/u_rc1_20171122/u_rc1coreg_st5_ZI_M170830C_1_1_20170830_123349_05_reorient_Template.nii'
+                                                         '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/DARTEL/u_rc1_20171122/u_rc1coreg_st5_ZI_M170830D_1_1_20170830_133114_05_reorient_Template.nii'
+                                                         '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/DARTEL/u_rc1_20171122/u_rc1coreg_st5_ZI_M170830G_1_1_20170830_170815_05_reorient_Template.nii'
+                                                         '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/DARTEL/u_rc1_20171122/u_rc1coreg_st5_ZI_M170831A_1_1_20170831_094722_05_reorient_Template.nii'
+                                                         '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/DARTEL/u_rc1_20171122/u_rc1coreg_st5_ZI_M170831B_1_1_20170831_105136_05_reorient_Template.nii'
+                                                         '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/DARTEL/u_rc1_20171122/u_rc1coreg_st5_ZI_M170831C_1_1_20170831_115950_05_reorient_Template.nii'
+                                                         '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/DARTEL/u_rc1_20171122/u_rc1coreg_st5_ZI_M170831D_1_1_20170831_131007_05_reorient_Template.nii'
+                                                         '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/DARTEL/u_rc1_20171122/u_rc1coreg_st5_ZI_M170831E_1_1_20170831_142143_05_reorient_Template.nii'
+                                                         '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/DARTEL/u_rc1_20171122/u_rc1coreg_st5_ZI_M170831F_1_1_20170831_153239_05_reorient_Template.nii'
+                                                         };
+%%
+%%
+matlabbatch{1}.spm.tools.dartel.crt_warped.images = {
+                                                     {
+                                                     '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/pvconverted_data/ZI_M170823A_1_1_20170823_111247/5/c1coreg_st5_ZI_M170823A_1_1_20170823_111247_05_reorient.nii'
+                                                     '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/pvconverted_data/ZI_M170823B_1_1_20170823_130543/5/c1coreg_st5_ZI_M170823B_1_1_20170823_130543_05_reorient.nii'
+                                                     '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/pvconverted_data/ZI_M170823C_1_1_20170823_141344/5/c1coreg_st5_ZI_M170823C_1_1_20170823_141344_05_reorient.nii'
+                                                     '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/pvconverted_data/ZI_M170823D_1_1_20170823_154439/5/c1coreg_st5_ZI_M170823D_1_1_20170823_154439_05_reorient.nii'
+                                                     '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/pvconverted_data/ZI_M170823E_1_1_20170823_165039/5/c1coreg_st5_ZI_M170823E_1_1_20170823_165039_05_reorient.nii'
+                                                     '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/pvconverted_data/ZI_M170824A_1_1_20170824_093456/11/c1coreg_st5_ZI_M170824A_1_1_20170824_093456_11_reorient.nii'
+                                                     '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/pvconverted_data/ZI_M170824B_1_1_20170824_105215/5/c1coreg_st5_ZI_M170824B_1_1_20170824_105215_05_reorient.nii'
+                                                     '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/pvconverted_data/ZI_M170830A_1_1_20170830_094641/5/c1coreg_st5_ZI_M170830A_1_1_20170830_094641_05_reorient.nii'
+                                                     '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/pvconverted_data/ZI_M170830B_1_1_20170830_105157/5/c1coreg_st5_ZI_M170830B_1_1_20170830_105157_05_reorient.nii'
+                                                     '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/pvconverted_data/ZI_M170830C_1_1_20170830_123349/5/c1coreg_st5_ZI_M170830C_1_1_20170830_123349_05_reorient.nii'
+                                                     '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/pvconverted_data/ZI_M170830D_1_1_20170830_133114/5/c1coreg_st5_ZI_M170830D_1_1_20170830_133114_05_reorient.nii'
+                                                     '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/pvconverted_data/ZI_M170830G_1_1_20170830_170815/5/c1coreg_st5_ZI_M170830G_1_1_20170830_170815_05_reorient.nii'
+                                                     '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/pvconverted_data/ZI_M170831A_1_1_20170831_094722/5/c1coreg_st5_ZI_M170831A_1_1_20170831_094722_05_reorient.nii'
+                                                     '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/pvconverted_data/ZI_M170831B_1_1_20170831_105136/5/c1coreg_st5_ZI_M170831B_1_1_20170831_105136_05_reorient.nii'
+                                                     '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/pvconverted_data/ZI_M170831C_1_1_20170831_115950/5/c1coreg_st5_ZI_M170831C_1_1_20170831_115950_05_reorient.nii'
+                                                     '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/pvconverted_data/ZI_M170831D_1_1_20170831_131007/5/c1coreg_st5_ZI_M170831D_1_1_20170831_131007_05_reorient.nii'
+                                                     '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/pvconverted_data/ZI_M170831E_1_1_20170831_142143/5/c1coreg_st5_ZI_M170831E_1_1_20170831_142143_05_reorient.nii'
+                                                     '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/pvconverted_data/ZI_M170831F_1_1_20170831_153239/5/c1coreg_st5_ZI_M170831F_1_1_20170831_153239_05_reorient.nii'
+                                                     }
+                                                     {
+                                                     '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/pvconverted_data/ZI_M170823A_1_1_20170823_111247/5/mcoreg_st5_ZI_M170823A_1_1_20170823_111247_05_reorient.nii'
+                                                     '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/pvconverted_data/ZI_M170823B_1_1_20170823_130543/5/mcoreg_st5_ZI_M170823B_1_1_20170823_130543_05_reorient.nii'
+                                                     '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/pvconverted_data/ZI_M170823C_1_1_20170823_141344/5/mcoreg_st5_ZI_M170823C_1_1_20170823_141344_05_reorient.nii'
+                                                     '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/pvconverted_data/ZI_M170823D_1_1_20170823_154439/5/mcoreg_st5_ZI_M170823D_1_1_20170823_154439_05_reorient.nii'
+                                                     '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/pvconverted_data/ZI_M170823E_1_1_20170823_165039/5/mcoreg_st5_ZI_M170823E_1_1_20170823_165039_05_reorient.nii'
+                                                     '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/pvconverted_data/ZI_M170824A_1_1_20170824_093456/11/mcoreg_st5_ZI_M170824A_1_1_20170824_093456_11_reorient.nii'
+                                                     '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/pvconverted_data/ZI_M170824B_1_1_20170824_105215/5/mcoreg_st5_ZI_M170824B_1_1_20170824_105215_05_reorient.nii'
+                                                     '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/pvconverted_data/ZI_M170830A_1_1_20170830_094641/5/mcoreg_st5_ZI_M170830A_1_1_20170830_094641_05_reorient.nii'
+                                                     '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/pvconverted_data/ZI_M170830B_1_1_20170830_105157/5/mcoreg_st5_ZI_M170830B_1_1_20170830_105157_05_reorient.nii'
+                                                     '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/pvconverted_data/ZI_M170830C_1_1_20170830_123349/5/mcoreg_st5_ZI_M170830C_1_1_20170830_123349_05_reorient.nii'
+                                                     '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/pvconverted_data/ZI_M170830D_1_1_20170830_133114/5/mcoreg_st5_ZI_M170830D_1_1_20170830_133114_05_reorient.nii'
+                                                     '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/pvconverted_data/ZI_M170830G_1_1_20170830_170815/5/mcoreg_st5_ZI_M170830G_1_1_20170830_170815_05_reorient.nii'
+                                                     '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/pvconverted_data/ZI_M170831A_1_1_20170831_094722/5/mcoreg_st5_ZI_M170831A_1_1_20170831_094722_05_reorient.nii'
+                                                     '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/pvconverted_data/ZI_M170831B_1_1_20170831_105136/5/mcoreg_st5_ZI_M170831B_1_1_20170831_105136_05_reorient.nii'
+                                                     '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/pvconverted_data/ZI_M170831C_1_1_20170831_115950/5/mcoreg_st5_ZI_M170831C_1_1_20170831_115950_05_reorient.nii'
+                                                     '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/pvconverted_data/ZI_M170831D_1_1_20170831_131007/5/mcoreg_st5_ZI_M170831D_1_1_20170831_131007_05_reorient.nii'
+                                                     '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/pvconverted_data/ZI_M170831E_1_1_20170831_142143/5/mcoreg_st5_ZI_M170831E_1_1_20170831_142143_05_reorient.nii'
+                                                     '/home/jonathan.reinwald/Output/2016_12_TTA/Oatp1c1_Mct8_dko/VBM/pvconverted_data/ZI_M170831F_1_1_20170831_153239/5/mcoreg_st5_ZI_M170831F_1_1_20170831_153239_05_reorient.nii'
+                                                     }
+                                                     }';
+%%
+matlabbatch{1}.spm.tools.dartel.crt_warped.jactransf = 1;
+matlabbatch{1}.spm.tools.dartel.crt_warped.K = 6;

@@ -1,0 +1,83 @@
+%% This scrript extracts impulsivity in the go-no-go taks
+% David Wolf, 06.2023
+clear; close all;
+addpath(genpath('/zi-flstorage/data/Jonathan/ICON_Autonomouse/01-scripts/01-AM/02-analyses/03-GNG'));
+
+% The reappraisal scan was the first scan and occurred between the 07/22
+% and 07/29. So all animals had experienced 4 reversals before it.
+%   Variante 1: compute learning parameters before the reappraisal scan
+%   Variante 2: compute learning parameters for the longest duration
+%   available (while keeping the max number of animals in). Two animals had
+%   been excluded after reappraisal, so the parameters are incomplete for
+%   them and correlation would not be possible.
+
+%% AM1
+processed_data_path = '/zi-flstorage/data/Jonathan/ICON_Autonomouse/03-processed-data/01-AM/01-AM1/02-GNG_task';
+
+% combine the single animal days into one d-struct for compatibility to
+% other scripts
+d_am1 = combine_single_animals(processed_data_path);
+
+% remove wrong animals 
+d_am1_short = d_am1;
+animal_names = []; for an=1:numel(d_am1_short); animal_names = cat(1,animal_names,{d_am1_short(an).events(1).ID}); end
+d_am1_short(contains(animal_names,{'0007CB2086','0007CB0F95','0007CB090F'})) = [];
+
+% compute learning features
+% number of trials to account before reversal
+ntrials_before_reversal = 150; 
+[impulsivity_am1,histogram_data_am1] = compute_impulsivity_ICON_jr(d_am1_short,5,ntrials_before_reversal);
+
+
+%% AM2
+processed_data_path = '/zi-flstorage/data/Jonathan/ICON_Autonomouse/03-processed-data/01-AM/02-AM2/02-GNG_task';
+d_am2 = combine_single_animals(processed_data_path);
+% number of trials to account before reversal
+ntrials_before_reversal = 150; 
+[impulsivity_am2,histogram_data_am2] = compute_impulsivity_ICON_jr(d_am2,5,ntrials_before_reversal);
+
+%% combine
+
+impulsivity = struct2table(cat(2,impulsivity_am1,impulsivity_am2));
+writetable(impulsivity,['/zi-flstorage/data/Jonathan/ICON_Autonomouse/04-outputs/01-AM/04-lickFeatures/short/impulsivity_' num2str(ntrials_before_reversal) 'trials.xlsx']);
+
+%% plot
+for AM_number = 1:2 
+    % figure
+    fig(AM_number)=figure('visible', 'off');
+    set(gcf,'Units','Normalized','OuterPosition',[0,0.04,0.5,0.9]);
+    
+    if AM_number==1
+        input_histogram_data = histogram_data_am1; input_impulsivity_data=impulsivity_am1;
+    else AM_number==2
+        input_histogram_data = histogram_data_am2; input_impulsivity_data=impulsivity_am2;
+    end
+    % Loop over animals
+    for an=1:12
+        subplot(3,4,an);
+        histogram('BinEdges',input_histogram_data(an).BinEdges,'BinCounts',input_histogram_data(an).BinCount_CSminus,'EdgeColor','none');
+        hold on;
+        histogram('BinEdges',input_histogram_data(an).BinEdges,'BinCounts',input_histogram_data(an).BinCount_CSplus,'EdgeColor','none');
+        ax=gca; ax.XLim=[0,3];
+        title({input_impulsivity_data(an).ID,[ ' ,Rej.' num2str(round(input_impulsivity_data(an).correct_rejection,2)) ' ,I:' num2str(round(input_impulsivity_data(an).lick_rate_at_odor_on_csminus_to_base_150trials,2))]});
+    end
+    % print
+    [annot, srcInfo] = docDataSrc(fig(AM_number),fullfile('/zi-flstorage/data/Jonathan/ICON_Autonomouse/04-outputs/01-AM/04-lickFeatures/short/'),mfilename('fullpath'),logical(1))
+    exportgraphics(fig(AM_number),fullfile('/zi-flstorage/data/Jonathan/ICON_Autonomouse/04-outputs/01-AM/04-lickFeatures/short/',['Lick_Data_AM' num2str(AM_number) '.pdf']),'Resolution',300);
+    print('-dpsc',fullfile('/zi-flstorage/data/Jonathan/ICON_Autonomouse/04-outputs/01-AM/04-lickFeatures/short/',['Lick_Data_AM' num2str(AM_number)]),'-painters','-r400','-bestfit');
+end
+
+%% check correlation to CS- PC1
+
+T = readtable('/zi-flstorage/data/Jonathan/ICON_Autonomouse/04-outputs/01-AM/04-lickFeatures/short/covariates_short.xlsx');
+
+
+figure;
+scatter(T.cs_minus_pc1,impulsivity.lick_rate_at_odor_on_csminus_to_base,'.','k')
+[rho,p] = corr(T.cs_minus_pc1,impulsivity.lick_rate_at_odor_on_csminus_to_base);
+title({['Pearson R = ',num2str(rho)],['p = ',num2str(p)]});
+xlabel('CS- PC1');
+ylabel('CS- impulsivity');
+
+
+

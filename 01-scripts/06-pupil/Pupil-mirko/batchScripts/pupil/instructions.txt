@@ -1,0 +1,13 @@
+
+
+MA 2006
+conda env list
+
+base                  *  C:\ProgramData\Anaconda3
+DLC-GPU                  C:\ProgramData\Anaconda3\envs\DLC-GPU <-- beta version for multiple animals, used for interaction analysis
+DLC-pupil                C:\ProgramData\Anaconda3\envs\DLC-pupil <-- second latest deeplabcut version, used for pupil analysis 
+dlc-windowsGPU           C:\ProgramData\Anaconda3\envs\dlc-windowsGPU <-- old pupil environment
+
+conda activate DLC-pupil
+
+python -m pupil.py

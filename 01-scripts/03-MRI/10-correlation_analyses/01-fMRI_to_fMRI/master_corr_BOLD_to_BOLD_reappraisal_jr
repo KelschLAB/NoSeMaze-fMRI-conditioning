@@ -1,0 +1,82 @@
+%% master_corr_BOLD_to_BOLD_reappraisal_jr.m
+% relationship between significant BOLD signal (beta-values) at odor and time point of no puff
+% Jonathan Reinwald, 08.08.2023
+
+% clearing
+clear all
+close all
+clc
+
+% define t-threshold
+tthresh{1}='01';
+tthresh{2}='001';
+
+% output directory
+
+
+%% loop over thresholds
+for tthresh_idx = 1:length(tthresh)
+    
+    %% load beta-values and create table
+    % load "mask_activation_v22_OdorBl3vsBl1_T01" --> PFC
+    load(['/home/jonathan.reinwald/ICON_Autonomouse/03-processed-data/03-MRI/01-reappraisal/05-GLM/03-results/HRFlongTC_withoutOnset_from2sHRF-GLM_EPI_wave_10cons_med1000_msk_s6_wrst_a1_u_despiked_del5____ROI_v22___COV_v1___ORTH_1___DERDISP0___20-Jan-2023/secondlevel/TP_NoPuff_Bl3_vs_TP_NoPuff_Bl1_11to40/mask_activation_v22_Bl3vsBl1_T' tthresh{tthresh_idx} '.mat'])
+    resINS=res;
+    
+    % load "mask_activation_v22_OdorBl3vsBl1_T01" --> PFC
+    load(['/home/jonathan.reinwald/ICON_Autonomouse/03-processed-data/03-MRI/01-reappraisal/05-GLM/03-results/HRFlongTC_withoutOnset_from2sHRF-GLM_EPI_wave_10cons_med1000_msk_s6_wrst_a1_u_despiked_del5____ROI_v22___COV_v1___ORTH_1___DERDISP0___20-Jan-2023/secondlevel/Odor_NoPuff_Bl3_vs_Odor_NoPuff_Bl1_11to40/mask_activation_v22_OdorBl3vsBl1_T' tthresh{tthresh_idx} '.mat']);
+    resS1=res;
+    
+    % load "mask_deactivation_v22_OdorBl3vsBl1_T01" --> PFC
+    load(['/home/jonathan.reinwald/ICON_Autonomouse/03-processed-data/03-MRI/01-reappraisal/05-GLM/03-results/HRFlongTC_withoutOnset_from2sHRF-GLM_EPI_wave_10cons_med1000_msk_s6_wrst_a1_u_despiked_del5____ROI_v22___COV_v1___ORTH_1___DERDISP0___20-Jan-2023/secondlevel/Odor_NoPuff_Bl3_vs_Odor_NoPuff_Bl1_11to40/mask_deactivation_v22_OdorBl3vsBl1_T' tthresh{tthresh_idx} '.mat']);
+    resPFC=res;
+    
+    % create data table
+    myBetas.(['T' tthresh{tthresh_idx}]).beta_table = table(resINS.mean_beta_TP_Puff_Bl1_11to40',resINS.mean_beta_TP_Puff_Bl3',resINS.mean_beta_TP_Puff_Bl3'-resINS.mean_beta_TP_Puff_Bl1_11to40',...
+        resPFC.mean_beta_Lavender_Bl1_11to40',resPFC.mean_beta_Lavender_Bl3',resPFC.mean_beta_Lavender_Bl3'-resPFC.mean_beta_Lavender_Bl1_11to40',...
+        resS1.mean_beta_Lavender_Bl1_11to40',resS1.mean_beta_Lavender_Bl3',resS1.mean_beta_Lavender_Bl3'-resS1.mean_beta_Lavender_Bl1_11to40',...
+        'VariableNames',{'TP_INS_bl1','TP_INS_bl3','TP_INS_bl3-bl1','OD_PFC_bl1','OD_PFC_bl3','OD_PFC_bl3-bl1','OD_S1_bl1','OD_S1_bl3','OD_S1_bl3-bl1'});
+    
+    %% correlation analysis
+    [rho,p]=corr(table2array(myBetas.(['T' tthresh{tthresh_idx}]).beta_table));
+    
+    % plot correlation matrix
+    fig1=figure('visible', 'on');
+    set(gcf,'Units','Normalized','OuterPosition',[0,0.04,0.4,0.7]);
+    imagesc(rho);%.*(p<.05));
+    set(gca,'dataAspectRatio',[1 1 1])
+    ax=gca;
+    set(gca,'TickLabelInterpreter','none');
+    ax.CLim=[-1,1];
+    crameri vik;
+    ax.YTick=1:length(rho);
+    ax.YTickLabel=myBetas.(['T' tthresh{tthresh_idx}]).beta_table.Properties.VariableNames;
+    ax.XTick=1:length(rho);
+    ax.XTickLabel=myBetas.(['T' tthresh{tthresh_idx}]).beta_table.Properties.VariableNames;
+    rotateXLabels(ax,90);
+    ax.FontSize=10;
+    
+    % Title
+    tt = title({'corr. BOLD resp.',['(CDT: p<0.' tthresh{tthresh_idx} ')']});
+    tt.Interpreter='none';
+    colorbar;
+    
+    % Mark significant p-values
+    for x=1:size(p,1)
+        for y=1:size(p,2)
+            if (x == y)
+                xv=[x- 0.5 x-0.5 x+.5 x+.5];yv=[y-.5 y+.5 y+.5 y-.5];
+                patch(xv,yv,[1 1 1])
+            end
+            if p(y,x)<.05
+                xv=[x- 0.5 x-0.5 x+.5 x+.5 x-.5];yv=[y-.5 y+.5 y+.5 y-.5 y-.5];
+                line(xv,yv,'linewidth',2,'color',[0 0 0]);
+            end
+        end
+    end
+end
+    
+    
+    
+    
+    
+    

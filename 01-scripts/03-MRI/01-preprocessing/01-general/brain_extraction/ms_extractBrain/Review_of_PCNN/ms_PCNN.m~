@@ -1,0 +1,86 @@
+function [ output_args ] = ms_PCNN( input_args )
+%MS_PCNN Summary of this function goes here
+%   Detailed explanation goes here
+
+P=spm_select;
+V=spm_vol(P);
+Mtx=spm_read_vols(V); 
+
+% Mtx=Mtx(:,:,45);
+
+%% 3D
+Mtx=spm_read_vols(V); 
+S=Mtx; S=S./max(max(S));
+
+N=50;
+Y=zeros([N,size(Mtx,1),size(Mtx,2), size(Mtx,3)]); F = Y; L = F; U = F; T = Y + 1; A = Y;
+
+% M=zeros(7,7,7); M(4,4,4)=1; %M=normpdf(M); M=M./max(max(max(M))); W = M;
+% M=smooth3(M, 'gaussian', 5);
+% M=[0.7 1 0.7; 1  0  1 ; 0.7 1 0.7;];
+M=fspecial('gaussian',11);
+clear vox
+se = strel('cube',4);
+for t = 1:N
+    K = convn(squeeze(Y(t,:,:,:)),M,'same');
+    F(t+1,:,:,:) = squeeze(exp(-log(2)/0.3).*F(t,:,:,:)) + 0.01*K + S;
+    L(t+1,:,:,:) = squeeze(exp(-log(2)/1).*L(t,:,:,:)) + 0.2.*K;
+    U(t+1,:,:,:) = F(t+1,:,:,:).*(1+0.2*L(t+1,:,:,:));
+    T(t+1,:,:,:) = squeeze(exp(-log(2)/10).*T(t,:,:,:) + 20.*Y(t,:,:,:));
+    Y(t+1,:,:,:) = squeeze(double(U(t+1,:,:,:)>T(t+1,:,:,:)));
+    A(t+1,:,:,:) = squeeze(A(t,:,:,:) + Y(t+1,:,:,:)); A(A>0)=1;
+    
+    BW = imerode(squeeze(A(t+1,:,:,:)),se); BW=imfill(BW,'holes');
+    CC = bwconncomp(BW);
+    numPixels = cellfun(@numel,CC.PixelIdxList);
+    [biggest,idx] = max(numPixels);
+    if ~isempty(idx); BW(CC.PixelIdxList{idx}) = 2; BW(BW<2)=0; BW(BW>0)=1; end
+    figure(22); imagesc(BW(:,:,45)); title(num2str(t)); pause(0.1)
+    if isempty(biggest); vox(t)=0; else vox(t)=biggest; end
+    fprintf('number of voxels: %.0f\n', vox(t))
+    figure(21); plot(vox)
+end
+ 
+%% 2D
+Mtx=spm_read_vols(V);
+Mtx=Mtx(:,:,55);
+S=Mtx; 
+% S=double(FLM(S));
+S=S./max(max(S));
+
+Y=zeros([1,size(Mtx,1),size(Mtx,2)]); F = Y; L = F; U = F; T = Y + 1; A = Y;
+
+clear vox
+% M=zeros(7); M(4,4)=1; M=normpdf(M,3,1); W = M;
+M=[0.7 1 0.7; 1  0  1 ; 0.7 1 0.7;]; % that works quite well!
+se = strel('cube',3);
+for t = 1:N
+    K = conv2(squeeze(Y(t,:,:)),M,'same');
+    F(t+1,:,:) = squeeze(exp(-log(2)/0.3).*F(t,:,:)) + 0.01*K + S;
+    L(t+1,:,:) = squeeze(exp(-log(2)/1).*L(t,:,:)) + 0.2.*K;
+    U(t+1,:,:) = F(t+1,:,:).*(1+0.2*L(t+1,:,:));
+    T(t+1,:,:) = squeeze(exp(-log(2)/10).*T(t,:,:) + 20.*Y(t,:,:));
+    Y(t+1,:,:) = squeeze(double(U(t+1,:,:)>T(t+1,:,:)));
+    % mask
+    A(t+1,:,:) = squeeze(A(t,:,:) + Y(t+1,:,:)); A(A>0)=1;
+    BW = imerode(squeeze(A(t+1,:,:)),se); BW=imfill(BW,'holes');
+    CC = bwconncomp(BW);
+    numPixels = cellfun(@numel,CC.PixelIdxList);
+    [biggest,idx] = max(numPixels);
+    if ~isempty(idx); BW(CC.PixelIdxList{idx}) = 2; BW(BW<2)=0; BW(BW>0)=1; vox(t)=biggest; else; vox(t)=0; end
+    mask(t,:,:)=BW;
+    figure(22); 
+    subplot(2,4,1); imagesc(BW); title(['Mask, n=' num2str(t)]); 
+    subplot(2,4,2); imagesc(squeeze(A(t,:,:))); title(['A']);
+    subplot(2,4,3); imagesc(squeeze(Y(t,:,:))); title(['Y']); 
+    subplot(2,4,4); imagesc(squeeze(T(t,:,:))); title(['T']); 
+    subplot(2,4,5); imagesc(squeeze(U(t,:,:))); title(['U']); 
+    subplot(2,4,6); plot(vox); title(['voxel']); 
+    subplot(2,4,7); imagesc(squeeze(F(t,:,:))); title(['F']); 
+    subplot(2,4,8); imagesc(squeeze(L(t,:,:))); title(['L']); 
+    fprintf('number of voxels: %.0f\n', vox(t))
+    pause(0.5)
+end
+
+end
+

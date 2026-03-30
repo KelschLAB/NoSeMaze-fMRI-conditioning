@@ -1,0 +1,170 @@
+%% plot_histograms_localGA_reappraisal_jr.m.m
+% Script for plotting pre-selected global graph metrics
+% Reinwald 06/2022
+
+%% Clearing
+close all
+clear all
+clc
+
+%% Preferences 
+% blocks
+block_selection{1}='Odor1to10';
+block_selection{2}='TPnoPuff1to10';
+block_selection{3}='Odor11to40';
+block_selection{4}='Odor81to120';
+block_selection{5}='TPnoPuff11to40';
+block_selection{6}='TPnoPuff81to120';
+% graph metrics
+selected_metrics = {'degree','strength','bci','cc','PI'};
+% range for thresholds
+thresh_range=[1:41];
+% color
+histogram_color={[204/255 51/255 204/255];[0 160/255 227/255];[204/255 51/255 204/255];[0 160/255 227/255];[1,0,0];[0,1,0]}%[204/255 51/255 204/255];[0 160/255 227/255]};
+% binwidth
+binwidth=[1,1,100,0.05,0.05];
+
+%% Selection of input
+% cormat version
+cormat_version = 'cormat_v11';
+% bi-/unihemispheric atlas
+separated_hemisphere = 0;
+% binarized/non-binarized network
+binarization_method = 'max';
+connectedness = 'connected';
+% input directories
+inputDir_GA = ['/home/jonathan.reinwald/ICON_Autonomouse/03-processed-data/03-MRI/01-reappraisal/07-GA/01-gstruct_files/' cormat_version filesep 'combined_hemisphere' filesep binarization_method '_' connectedness];
+
+%% Output directory
+if separated_hemisphere==1
+    outputDir = ['/home/jonathan.reinwald/ICON_Autonomouse/04-outputs/03-MRI/01-reappraisal/06-GA/' cormat_version filesep 'separated_hemisphere' filesep binarization_method '_' connectedness '/histograms_localMetrics'];
+elseif separated_hemisphere==0
+    outputDir = ['/home/jonathan.reinwald/ICON_Autonomouse/04-outputs/03-MRI/01-reappraisal/06-GA/' cormat_version filesep 'combined_hemisphere' filesep binarization_method '_' connectedness '/histograms_localMetrics'];
+end
+if ~exist(outputDir)
+    mkdir(outputDir)
+end
+
+%% Data compilation
+% Loop over current metric (degree, strength, ...)
+for curr_metricID = 1:length(selected_metrics)
+    % set figure
+    fig(curr_metricID)=figure('visible','on');
+    set(gcf,'Units','Normalized','OuterPosition',[0,0.04,0.8,0.7]);
+    % predefine subfigure
+    subfig=1;
+    
+    % Loop over blocks
+    for bl=1:length(block_selection)
+        % load gstruc-file
+        load(fullfile(inputDir_GA,['gstruc_' block_selection{bl} '_p.mat']));
+        
+        % Loop over thresholds
+        for thr=thresh_range
+            
+            % Loop over subjects
+            for subj=1:size(gstruc,2)
+                % Fieldnames
+                myFieldnames = fieldnames(gstruc);
+                % Condition: only when metrics exists
+                if any(strcmp(myFieldnames,['l_' selected_metrics{curr_metricID}]))
+                    % fill data in 
+                    myMetrics.(myFieldnames{strcmp(myFieldnames,['l_' selected_metrics{curr_metricID}])}).(block_selection{bl}).values(thr,subj,:)=gstruc(thr,subj).(myFieldnames{strcmp(myFieldnames,['l_' selected_metrics{curr_metricID}])});
+                else
+                    % close figure if no metrics (for strength)
+                    if ishandle(fig(curr_metricID))
+                        close(fig(curr_metricID));
+                    end
+                end
+                
+            end
+        end
+        
+        %% Plotting for the metrics
+        % if metric exist
+        if any(strcmp(myFieldnames,['l_' selected_metrics{curr_metricID}]))
+            
+            % subplots
+            if bl==1 || bl==3 || bl==5
+                subplot(1,3,subfig);
+                counter=1;
+                if bl==1 || bl==3
+                    subfig=subfig+1;
+                end
+            end
+            
+            % histogram
+            hh(counter)=histogram(myMetrics.(myFieldnames{strcmp(myFieldnames,['l_' selected_metrics{curr_metricID}])}).(block_selection{bl}).values(:),'BinWidth',binwidth(curr_metricID));
+            box off
+            % color definition
+            hh(counter).EdgeColor='none';
+            hh(counter).FaceColor=histogram_color{bl};
+            hh(counter).FaceAlpha=0.1;           
+            hold on;
+            hh2(counter)=histogram(myMetrics.(myFieldnames{strcmp(myFieldnames,['l_' selected_metrics{curr_metricID}])}).(block_selection{bl}).values(:),'BinWidth',binwidth(curr_metricID),'DisplayStyle','stairs');
+            hh2(counter).EdgeColor=histogram_color{bl};
+            hh2(counter).EdgeColor=histogram_color{bl};
+            hh2(counter).LineWidth=2;          
+            hold on;
+            % axis
+            ax=gca;
+            ax.YLim=[0,round(max([hh.BinCounts,hh2.BinCounts]+300),-2)];
+            ax.XLim=[0,max(hh(counter).Data)];
+            ax.LineWidth=1.5;
+            ax.FontWeight='bold';
+            ax.YLabel.String='rate';
+            ax.XLabel.String=selected_metrics{curr_metricID};
+            % mean value as line
+            ll=line([mean(mean(mean(myMetrics.(myFieldnames{strcmp(myFieldnames,['l_' selected_metrics{curr_metricID}])}).(block_selection{bl}).values(:)))),mean(mean(mean(myMetrics.(myFieldnames{strcmp(myFieldnames,['l_' selected_metrics{curr_metricID}])}).(block_selection{bl}).values(:))))],[0,round(max(hh(counter).BinCounts+500),-2)])
+            ll.Color=histogram_color{bl};
+            ll.LineWidth=1.5;
+            if counter==2
+                ll.LineStyle='--';
+            end
+            % legend
+            if bl==2 || bl==4 || bl==6
+                legend([hh(1),hh(2)],{block_selection{bl-1},block_selection{bl}})
+            end
+            % super title
+            if bl==6
+                suptitle(selected_metrics{curr_metricID});
+            end
+            % counter update
+            counter=counter+1;
+        end
+    end
+    % equalize limits of axes in all subplots
+    axAll = findobj(fig(curr_metricID),'type','axes');
+    for axIdx=1:length(axAll)-1
+        axAll(axIdx+1).XLim=[0,max([axAll.XLim])];
+        axAll(axIdx+1).YLim=[0,max([axAll.YLim])];
+    end
+    lineAll = findobj(fig(curr_metricID),'type','line');
+    for lineIdx=1:length(lineAll)
+        lineAll(lineIdx).YData=[0,max([axAll.YLim])];
+    end
+    % print
+    % if figure exists (e.g. strength only in max)
+    if ishandle(fig(curr_metricID))
+        [annot, srcInfo] = docDataSrc(fig(curr_metricID),outputDir,mfilename('fullpath'),logical(1))
+        exportgraphics(fig(curr_metricID),fullfile(outputDir,['Histogram_' selected_metrics{curr_metricID} '.pdf']),'Resolution',300);
+        print('-dpsc',fullfile(outputDir,['Histogram_' selected_metrics{curr_metricID}]),'-painters','-r400','-append');
+    end
+end
+% % save script in the current output folder
+% FileNameAndLocation=[mfilename('fullpath')];
+% [~,fname,~]=fileparts(FileNameAndLocation);
+% newbackup=[outputDir filesep fname '.m'];
+% currentfile=strcat(FileNameAndLocation, '.m');
+% if ~exist(newbackup)
+%     copyfile(currentfile,newbackup);
+% end
+% cd(outputDir);
+% close all;
+
+
+
+
+
+
+
